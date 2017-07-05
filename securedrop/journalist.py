@@ -15,6 +15,7 @@ from sqlalchemy.sql.expression import false
 import config
 import version
 import crypto_util
+import i18n
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
@@ -25,6 +26,8 @@ import worker
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CSRFProtect(app)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
