@@ -67,6 +67,9 @@ def setup_g():
     if uid:
         g.user = Journalist.query.get(uid)
 
+    g.locale = i18n.get_locale()
+    g.locales = i18n.get_locale2name()
+
     if request.method == 'POST':
         filesystem_id = request.form.get('filesystem_id')
         if filesystem_id:
