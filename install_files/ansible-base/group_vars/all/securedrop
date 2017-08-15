@@ -35,3 +35,5 @@ apparmor_profiles:
 
 # Installing the securedrop-app-code.deb package
 securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
+
+tor_apt_repo_url: http://tor-apt.ops.freedom.press
