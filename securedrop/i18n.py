@@ -77,6 +77,10 @@ def get_locale():
         return getattr(config, 'DEFAULT_LOCALE')
 
 
+def get_text_direction(locale):
+    return core.Locale.parse(locale).text_direction
+
+
 def get_locale2name():
     locale2name = collections.OrderedDict()
     for l in sorted(LOCALES):
