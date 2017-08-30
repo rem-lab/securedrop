@@ -205,5 +205,3 @@ class TestI18N(object):
     def teardown_class(cls):
         reload(journalist)
         reload(source)
-        reload(config)
-        reload(i18n)
