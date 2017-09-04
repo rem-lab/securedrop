@@ -26,6 +26,7 @@ development_dependencies:
   - tmux
   - vim
   - libffi-dev # for sphinx
+  - git # for manage.py translate-desktop
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them
