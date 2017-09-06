@@ -68,13 +68,3 @@ def test_securedrop_tmp_clean_cron(Command, Sudo):
         cronjob = "@daily {}/manage.py clean-tmp".format(
             sdvars.securedrop_code)
         assert cronjob in cronlist
-
-
-def test_app_workerlog_dir(File, Sudo):
-    """ ensure directory for worker logs is present """
-    f = File('/var/log/securedrop_worker')
-    with Sudo():
-        assert f.is_directory
-        assert f.user == "root"
-        assert f.group == "root"
-        assert oct(f.mode) == "0644"

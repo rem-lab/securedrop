@@ -3,6 +3,7 @@
 """
 import os
 from os.path import abspath, dirname, exists, isdir, join, realpath
+import journalist
 import shutil
 import subprocess
 import threading
@@ -15,13 +16,6 @@ import crypto_util
 from db import init_db, db_session
 
 FILES_DIR = abspath(join(dirname(realpath(__file__)), '..', 'files'))
-
-# TODO: the PID file for the redis worker is hard-coded below.  Ideally this
-# constant would be provided by a test harness.  It has been intentionally
-# omitted from `config.py.example` in order to isolate the test vars from prod
-# vars.  When refactoring the test suite, the test_worker_pidfile
-# test_worker_pidfile is also hard-coded in `manage.py`.
-TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
 
 
 def create_directories():
@@ -52,11 +46,6 @@ def setup():
     init_db()
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
-    # Start the Python-RQ worker if it's not already running
-    if not exists(TEST_WORKER_PIDFILE):
-        subprocess.Popen(["rqworker",
-                          "-P", config.SECUREDROP_ROOT,
-                          "--pid", TEST_WORKER_PIDFILE])
     journalist.shredder.start()
 
 

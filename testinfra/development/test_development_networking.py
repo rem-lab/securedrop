@@ -38,15 +38,6 @@ def test_development_ssh_listening(Socket):
     assert s.is_listening
 
 
-def test_development_redis_worker(Socket):
-    """
-    Ensure that Redis worker is listening on localhost.
-    This worker is used to handle incoming submissions.
-    """
-
-    s = Socket("tcp://127.0.0.1:6379")
-    assert s.is_listening
-
 # The Flask runners for the source and journalist interfaces
 # aren't configured to run by default, e.g. on boot. Nor
 # do the app tests cause them to be run. So, we shouldn't

@@ -136,8 +136,8 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("No documents to display.", resp.data)
 
         # the file should be deleted from the filesystem
-        # since file deletion is handled by a polling worker, this test needs
-        # to wait for the worker to get the job and execute it
+        # since file deletion is handled by thread, this test needs
+        # to wait for the thread notice the file and delete
         utils.async.wait_for_assertion(
             lambda: self.assertFalse(
                 os.path.exists(store.path(filesystem_id, doc_name))
@@ -226,8 +226,8 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("No documents to display.", resp.data)
 
         # the file should be deleted from the filesystem
-        # since file deletion is handled by a polling worker, this test needs
-        # to wait for the worker to get the job and execute it
+        # since file deletion is handled by thread, this test needs
+        # to wait for the thread notice the file and delete
         utils.async.wait_for_assertion(
             lambda: self.assertFalse(
                 os.path.exists(store.path(filesystem_id, doc_name))

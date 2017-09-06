@@ -103,11 +103,6 @@ appserver_dependencies:
   - secure-delete
   - sqlite
   - apparmor-utils
-  - redis-server
-  - supervisor
-
-# Log file location for worker service, used in supervisor template.
-worker_logs_dir: /var/log/securedrop_worker
 
 # The locale used when the browser or the user do not have a preference
 securedrop_default_locale: en_US

@@ -21,10 +21,8 @@ def test_apache_default_docroot_is_absent(File):
   'haveged',
   'python',
   'python-pip',
-  'redis-server',
   'secure-delete',
   'sqlite',
-  'supervisor',
 ])
 def test_securedrop_application_apt_dependencies(Package, package):
     """

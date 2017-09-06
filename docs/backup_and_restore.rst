@@ -42,7 +42,7 @@ currently on the *Application Server* by SSHing in and running
           is especially true because SecureDrop uses ``srm`` to securely erase
           file submissions, which takes significantly more time than normal file
           deletion. You can monitor the progress of queued deletion jobs with
-          ``sudo tail -f /var/log/securedrop_worker/err.log``.
+          ``sudo tail -f /var/log/apache/journalist-error.log``.
 
 If you find you cannot perform a backup or restore due to this
 constraint, and have already deleted old submissions from the Journalist Interface,

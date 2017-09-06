@@ -11,8 +11,6 @@ psutil
 pycrypto
 pyotp
 qrcode
-redis
-rq
 scrypt
 SQLAlchemy
 Werkzeug
