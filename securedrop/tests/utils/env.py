@@ -57,12 +57,14 @@ def setup():
         subprocess.Popen(["rqworker",
                           "-P", config.SECUREDROP_ROOT,
                           "--pid", TEST_WORKER_PIDFILE])
+    journalist.shredder.start()
 
 
 def teardown():
     # make sure threads launched by tests complete before
     # teardown, otherwise they may fail because resources
     # they need disappear
+    journalist.shredder.stop()
     for t in threading.enumerate():
         if t.is_alive() and not isinstance(t, threading._MainThread):
             t.join()

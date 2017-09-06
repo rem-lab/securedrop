@@ -8,9 +8,7 @@ import config
 import logging
 import manage
 import mock
-import pytest
 from StringIO import StringIO
-import subprocess
 import sys
 import time
 import unittest
@@ -196,31 +194,3 @@ class TestManage(object):
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
         assert 'template hello i18n' not in mo
-
-
-class TestSh(object):
-
-    def test_sh(self):
-        assert 'A' == manage.sh("echo -n A")
-        with pytest.raises(Exception) as excinfo:
-            manage.sh("exit 123")
-        assert excinfo.value.returncode == 123
-
-    def test_sh_progress(self, caplog):
-        manage.sh("echo AB ; sleep 5 ; echo C")
-        records = caplog.records()
-        assert ':sh: ' in records[0].message
-        assert 'AB' == records[1].message
-        assert 'C' == records[2].message
-
-    def test_sh_input(self, caplog):
-        assert 'abc' == manage.sh("cat", 'abc')
-
-    def test_sh_fail(self, caplog):
-        with pytest.raises(subprocess.CalledProcessError) as excinfo:
-            manage.sh("/bin/echo -n AB ; /bin/echo C ; exit 111")
-        assert excinfo.value.returncode == 111
-        for record in caplog.records():
-            if record.levelname == 'ERROR':
-                assert ('replay full' in record.message or
-                        'ABC\n' == record.message)

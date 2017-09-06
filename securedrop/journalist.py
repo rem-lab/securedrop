@@ -13,6 +13,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
 
 import config
+import os
 import version
 import crypto_util
 import store
@@ -20,7 +21,8 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, LoginThrottledException,
                 PasswordError, InvalidUsernameException)
-import worker
+from shredder import Shredder
+shredder = Shredder(os.path.join(config.SECUREDROP_DATA_ROOT, 'shredder'))
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -522,7 +524,7 @@ def col(filesystem_id):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(store.delete_source_directory, filesystem_id)
+    shredder.rm(store.path(filesystem_id))
 
     # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(filesystem_id)
@@ -531,7 +533,6 @@ def delete_collection(filesystem_id):
     source = get_source(filesystem_id)
     db_session.delete(source)
     db_session.commit()
-    return job
 
 
 @app.route('/col/process', methods=('POST',))
@@ -763,7 +764,7 @@ def confirm_bulk_delete(filesystem_id, items_selected):
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
         item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(store.secure_unlink, item_path)
+        shredder.rm(item_path)
         db_session.delete(item)
     db_session.commit()
 
@@ -811,4 +812,6 @@ def flag():
 
 if __name__ == "__main__":  # pragma: no cover
     debug = getattr(config, 'env', 'prod') != 'prod'
+    shredder.start()
     app.run(debug=debug, host='0.0.0.0', port=8081)
+    shredder.stop()

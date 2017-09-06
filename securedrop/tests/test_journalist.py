@@ -740,13 +740,15 @@ class TestJournalistApp(TestCase):
                                        self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        job = journalist.delete_collection(self.source.filesystem_id)
+        journalist.delete_collection(self.source.filesystem_id)
 
-        # Wait up to 5s to wait for Redis worker `srm` operation to complete
-        utils.async.wait_for_redis_worker(job)
-
-        # Encrypted documents no longer exist
-        self.assertFalse(os.path.exists(dir_source_docs))
+        success = False
+        for i in range(30):
+            if not os.path.exists(dir_source_docs):
+                success = True
+                break
+            time.sleep(1)
+        self.assertTrue(success)
 
     def test_download_selected_submissions_from_source(self):
         source, _ = utils.db_helper.init_source()
