@@ -8,10 +8,10 @@
 - include: validate_gpg_info.yml
   with_items:
     - keyfile: "{{ ossec_alert_gpg_public_key }}"
-      fingerprint: "{{ ossec_gpg_fpr }}"
+      fingerprint: "{{ ossec_gpg_fpr|replace(" ","") }}"
 
     - keyfile: "{{ securedrop_app_gpg_public_key }}"
-      fingerprint: "{{ securedrop_app_gpg_fingerprint }}"
+      fingerprint: "{{ securedrop_app_gpg_fingerprint|replace(" ","") }}"
 
 - include: validate_ossec_info.yml
 
